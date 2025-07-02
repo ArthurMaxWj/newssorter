@@ -1,4 +1,4 @@
-package com.example.openrouter.dto;
+package com.amwojcik.newssorter.chat;
 
 public class ChatMessage {
     private String role;

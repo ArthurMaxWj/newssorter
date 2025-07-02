@@ -1,4 +1,4 @@
-package com.example.openrouter.dto;
+package com.amwojcik.newssorter.chat;
 
 import java.util.List;
 

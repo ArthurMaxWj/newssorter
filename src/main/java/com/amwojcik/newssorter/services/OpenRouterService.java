@@ -1,8 +1,8 @@
-package com.example.openrouter.service;
+package com.amwojcik.newssorter.services;
 
-import com.example.openrouter.dto.ChatMessage;
-import com.example.openrouter.dto.ChatRequest;
-import com.example.openrouter.dto.ChatResponse;
+import com.amwojcik.newssorter.chat.ChatMessage;
+import com.amwojcik.newssorter.chat.ChatRequest;
+import com.amwojcik.newssorter.chat.ChatResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

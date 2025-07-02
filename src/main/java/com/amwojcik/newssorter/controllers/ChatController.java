@@ -1,6 +1,6 @@
-package com.example.openrouter.controller;
+package com.amwojcik.newssorter.controllers;
 
-import com.example.openrouter.service.OpenRouterService;
+import com.amwojcik.newssorter.services.OpenRouterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;

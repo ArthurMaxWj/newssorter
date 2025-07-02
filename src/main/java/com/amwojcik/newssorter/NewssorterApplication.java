@@ -1,11 +1,11 @@
-package com.example.openrouter;
+package com.amwojcik.newssorter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OpenRouterApplication {
+public class NewssorterApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OpenRouterApplication.class, args);
+        SpringApplication.run(NewssorterApplication.class, args);
     }
 }
