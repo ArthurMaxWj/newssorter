@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All articles</title>
+</head>
+<body>
+    <h1>All articles (except global for now)</h1>
+    
+    <div th:each="article : ${articleslist}">
+        <span th:text="${article.date}">Date</span>
+        <span><strong th:text="${article.title}">Title</strong></span><br>
+        <span th:text="${article.content}">Content</span>
+        <hr>
+    </div>
+</body>
+</html>

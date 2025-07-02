@@ -1,4 +1,4 @@
-package com.amwojcik.newssorter.chat;
+package com.amwojcik.newssorter.models.chat;
 
 public class ChatMessage {
     private String role;

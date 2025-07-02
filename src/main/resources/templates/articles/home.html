@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All articles</title>
+</head>
+<body>
+    
+    <div id="content-to-replace">
+        <h1>Just articles, or AI-assigned cities too?</h1>
+
+        <form th:action="@{/static-all}" method="get">
+            <button type="submit">Just show all articles, no AI</button>
+        </form>
+        
+        <form th:action="@{/dynamic-all}" method="get">
+            <label>
+                <input type="checkbox" name="forcememo" />
+                Emulate AI (force memorized value)
+            </label>
+            <button type="submit">Group articles with AI</button>
+        </form>        
+    </div>
+    
+</body>
+</html>

@@ -1,8 +1,8 @@
 package com.amwojcik.newssorter.services;
 
-import com.amwojcik.newssorter.chat.ChatMessage;
-import com.amwojcik.newssorter.chat.ChatRequest;
-import com.amwojcik.newssorter.chat.ChatResponse;
+import com.amwojcik.newssorter.models.chat.ChatMessage;
+import com.amwojcik.newssorter.models.chat.ChatRequest;
+import com.amwojcik.newssorter.models.chat.ChatResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class OpenRouterService {
                     .getMessage()
                     .getContent();
         } else {
-            return "Error: " + response.getStatusCode();
+            return "Processing error: error from OpenRouter API:" + response.getStatusCode();
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.amwojcik.newssorter.controllers;
 
 import com.amwojcik.newssorter.services.OpenRouterService;
+import com.amwojcik.newssorter.models.articles.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+
 
 import org.springframework.core.io.ClassPathResource;
 import java.io.InputStream;
@@ -11,6 +14,13 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @Controller
 public class ChatController {
@@ -22,21 +32,67 @@ public class ChatController {
 
     @GetMapping("/")
     public String home() {
-      return "redirect:talkai";
+        return "articles/home";
     }
 
-    @GetMapping("/talkai")
-    @ResponseBody
-    public String talkai(@RequestParam(value = "city", defaultValue = "Oklahoma City") String city) {
+    @GetMapping("/static-all")
+    public String staticall(Model model) {
+        List<Article> articles = new ArrayList<Article>();
+        articles.add(new Article("hiii", "content", "2025", Article.ArticleKind.LOCAL));
+        articles.add(new Article("hello", "more content", "2025", Article.ArticleKind.LOCAL));
+        articles.add(new Article("heyy", "some content lol", "2025", Article.ArticleKind.LOCAL));
 
+        model.addAttribute("articleslist", articles);
+        return "articles/staticall";
+    }
+
+    @GetMapping("/dynamic-all")
+    public String dynamicall(@RequestParam(name = "forcememo", required = false) String forceMemorizedValue, Model model) {
+        boolean isMemoForced = "on".equals(forceMemorizedValue);
+
+        // TODO: use parameter later in project
+        String result = processAi(true); 
+        if (result.startsWith("Processing error:")) {
+            model.addAttribute("error", result);
+            return "articles/error";
+        }
+
+        List<String> cities = new ArrayList<>();
+        for (String city : result.split(",")) {
+            cities.add(city.trim());
+        }
+
+        // JSON into List of Articles
+        String json;
+        List<Article> articles;
+        try {
+            json = readFileAsString("internal/articles.json");
+            ObjectMapper mapper = new ObjectMapper();
+            articles = mapper.readValue(json, new TypeReference<List<Article>>() {});
+        } catch (Exception e) {
+            model.addAttribute("error", "Can't read or deserialize articles.json file");
+            return "articles/error";
+        }
+        
+        
+        for (int i = 0; i < articles.size(); i++) {
+            Article a = articles.get(i);
+            a.setCity(cities.get(i));
+            articles.set(i, a);
+        }
+
+        model.addAttribute("articleslist", articles);
+        return "articles/dynamicall";
+    }
+
+    public String processAi(boolean forceMemo) {
         String query;
         try {
             query = chatQuery();
         } catch (Exception e) {
-            return "Internal files of articles or cities might have been corrupted.";
+            return "Processing error: Internal files of articles or cities might have been corrupted.";
         }
 
-        // return String.format("You asked: <pre>%s</pre>", query);
         String searchResult = """
                 Perrysburg, Toledo, Toledo, Toledo, Toledo, Oklahoma City, Oklahoma City,
                 Oklahoma City, Oklahoma City, Portland, Portland, Portland, Portland, Portland, Portland,
@@ -50,12 +106,19 @@ public class ChatController {
                 Spokane, Des Moines, Fayetteville, Huntsville, Augusta, Sioux Falls, Unknown, Topeka, Akron
                 """;
         
-        // searchResult openRouterService.getCompletion(query);
+        if (!forceMemo) {
+            openRouterService.getCompletion(query);
+        }
 
+        if (searchResult.startsWith("Processing error:")) { // API error
+            return searchResult;
+        }
+
+        // some modles don't return only CSV format
         if (isResultOk(searchResult)) {
-            return String.format("Result of search: <pre>%s</pre>", obtainSignificantPart(searchResult));
+            return obtainSignificantPart(searchResult);
         } else {
-            return "AI returned something I can't parse.";
+            return "Processing error: AI returned something I can't parse.";
         }
 
 
@@ -94,6 +157,11 @@ public class ChatController {
         return matcher.find();
     }
 
+    /**
+     * If the result is contained in the answer, 
+     * but there is also other unnecessary information is present,
+     * filter only the data we need.
+     */
     private String obtainSignificantPart(String res) {
         Pattern pattern = REGEXP_PATTERN;
         Matcher matcher = pattern.matcher(res);
