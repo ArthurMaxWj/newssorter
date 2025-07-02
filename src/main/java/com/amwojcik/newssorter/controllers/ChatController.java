@@ -20,9 +20,12 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.Optional;
 
 
-@Controller
+@RestController
 public class ChatController {
 
     private final Pattern REGEXP_PATTERN = Pattern.compile("[a-zA-Z\\s.']+(,[a-zA-Z\\s.']+)*");
@@ -32,18 +35,18 @@ public class ChatController {
 
     @GetMapping("/")
     public String home() {
-        return "articles/home";
+        return "Use /static-all or /dynamic-all";
     }
 
     @GetMapping("/static-all")
     public String staticall(Model model) {
-        List<Article> articles = new ArrayList<Article>();
-        articles.add(new Article("hiii", "content", "2025", Article.ArticleKind.LOCAL));
-        articles.add(new Article("hello", "more content", "2025", Article.ArticleKind.LOCAL));
-        articles.add(new Article("heyy", "some content lol", "2025", Article.ArticleKind.LOCAL));
-
-        model.addAttribute("articleslist", articles);
-        return "articles/staticall";
+        String json;
+        try {
+            json = readFileAsString("internal/articles.json");
+        } catch (Exception e) {
+            return "Processing Error: Internal files of articles or cities might have been corrupted.";
+        }
+        return json;
     }
 
     @GetMapping("/dynamic-all")
@@ -52,9 +55,8 @@ public class ChatController {
 
         // TODO: use parameter later in project
         String result = processAi(true); 
-        if (result.startsWith("Processing error:")) {
-            model.addAttribute("error", result);
-            return "articles/error";
+        if (result.contains("Error:")) {
+            return result;
         }
 
         List<String> cities = new ArrayList<>();
@@ -62,18 +64,11 @@ public class ChatController {
             cities.add(city.trim());
         }
 
-        // JSON into List of Articles
-        String json;
         List<Article> articles;
-        try {
-            json = readFileAsString("internal/articles.json");
-            ObjectMapper mapper = new ObjectMapper();
-            articles = mapper.readValue(json, new TypeReference<List<Article>>() {});
-        } catch (Exception e) {
-            model.addAttribute("error", "Can't read or deserialize articles.json file");
-            return "articles/error";
-        }
-        
+        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile();
+        if (articlesMaybe.isPresent()) {
+            articles = articlesMaybe.get();
+        } else return "JSON Error: Can't read or deserialize articles.json file";
         
         for (int i = 0; i < articles.size(); i++) {
             Article a = articles.get(i);
@@ -81,8 +76,7 @@ public class ChatController {
             articles.set(i, a);
         }
 
-        model.addAttribute("articleslist", articles);
-        return "articles/dynamicall";
+        return articlesToJson(articles).orElse("JSON Error: Can't serialize articles into JSON");
     }
 
     public String processAi(boolean forceMemo) {
@@ -90,7 +84,7 @@ public class ChatController {
         try {
             query = chatQuery();
         } catch (Exception e) {
-            return "Processing error: Internal files of articles or cities might have been corrupted.";
+            return "Processing Error: Internal files of articles or cities might have been corrupted.";
         }
 
         String searchResult = """
@@ -110,7 +104,7 @@ public class ChatController {
             openRouterService.getCompletion(query);
         }
 
-        if (searchResult.startsWith("Processing error:")) { // API error
+        if (searchResult.contains("Error:")) { // API error
             return searchResult;
         }
 
@@ -118,7 +112,7 @@ public class ChatController {
         if (isResultOk(searchResult)) {
             return obtainSignificantPart(searchResult);
         } else {
-            return "Processing error: AI returned something I can't parse.";
+            return "Processing Error: AI returned something I can't parse.";
         }
 
 
@@ -126,12 +120,6 @@ public class ChatController {
 
     
 
-    private String readFileAsString(String classpathFile) throws Exception {
-        ClassPathResource resource = new ClassPathResource(classpathFile);
-        try (InputStream inputStream = resource.getInputStream()) {
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 
     private String chatQuery() throws Exception {
         String cities = readFileAsString("internal/cities.csv");
@@ -167,6 +155,35 @@ public class ChatController {
         Matcher matcher = pattern.matcher(res);
         boolean matchFound = matcher.find();
         return matcher.group(0);
+    }
+
+
+    private String readFileAsString(String classpathFile) throws Exception {
+        ClassPathResource resource = new ClassPathResource(classpathFile);
+        try (InputStream inputStream = resource.getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private Optional<String> articlesToJson(List<Article> articles) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return Optional.of(mapper.writeValueAsString(articles));
+        } catch (JsonProcessingException e) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<List<Article>> articlesFromInternalJsonFile() {
+        String json;
+        List<Article> articles;
+        try {
+            json = readFileAsString("internal/articles.json");
+            ObjectMapper mapper = new ObjectMapper();
+            return Optional.of(mapper.readValue(json, new TypeReference<List<Article>>() {}));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
 }
