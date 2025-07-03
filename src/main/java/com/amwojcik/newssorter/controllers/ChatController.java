@@ -49,6 +49,19 @@ public class ChatController {
             articles.set(i, a);
         }
 
+        Optional<List<Article>> articlesGlobalMaybe = articlesFromInternalJsonFile("articles-global");
+        if (articlesMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't read or deserialize articles-global.json file");
+        }
+        List<Article> articlesGlobal = articlesGlobalMaybe.get();
+
+        for (int i = 0; i < articlesGlobal.size(); i++) {
+            Article a = articlesGlobal.get(i);
+            a.setCity("Global");
+            a.setKind(Article.ArticleKind.GLOBAL);
+            articles.add(a); // append to articles
+        }
+
         Optional<String> resMaybe = articlesToJson(articles);
         if (resMaybe.isEmpty()) {
             return wrapFailure("JSON Error: Can't serialize articles into JSON");
@@ -77,13 +90,26 @@ public class ChatController {
             return wrapFailure("JSON Error: Can't read or deserialize articles-local.json file");
         }
         List<Article> articles = articlesMaybe.get();
-
+        
         
         for (int i = 0; i < articles.size(); i++) {
             Article a = articles.get(i);
             a.setCity(cities.get(i));
             a.setKind(Article.ArticleKind.LOCAL);
             articles.set(i, a);
+        }
+
+        Optional<List<Article>> articlesGlobalMaybe = articlesFromInternalJsonFile("articles-global");
+        if (articlesMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't read or deserialize articles-global.json file");
+        }
+        List<Article> articlesGlobal = articlesGlobalMaybe.get();
+
+        for (int i = 0; i < articlesGlobal.size(); i++) {
+            Article a = articlesGlobal.get(i);
+            a.setCity("Global");
+            a.setKind(Article.ArticleKind.GLOBAL);
+            articles.add(a); // append to articles
         }
 
         Optional<String> resMaybe = articlesToJson(articles);
