@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import HomePage from './pages/HomePage'
 import ShowAllStaticPage from './pages/ShowAllStaticPage'
 import ShowAllDynamicPage from './pages/ShowAllDynamicPage'

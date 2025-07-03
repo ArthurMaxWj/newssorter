@@ -17,7 +17,7 @@ function ShowAllStaticPage(props) {
     fetch('/api/static-all')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success = "true") {
+        if (data.success == "true") {
           props.setStore({
             ...props.store,
             staticArticles: data.articles

@@ -18,7 +18,7 @@ function ShowAllDynamicPage(props) {
     fetch('/api/dynamic-all')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success = "true") {
+        if (data.success == "true") {
           props.setStore({
             ...props.store,
             dynamicArticles: data.articles

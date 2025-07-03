@@ -36,6 +36,7 @@ public class ChatController {
 
     @GetMapping("/static-all")
     public String staticall(Model model) {
+        if (true) return wrapFailure("Processing Error: Internal files of articles or cities might have been corrupted.");
         String json;
         try {
             json = readFileAsString("internal/articles.json");
@@ -189,7 +190,7 @@ public class ChatController {
         return String.format("""
                 {
                     "success": "false",
-                    "error": "$s"
+                    "error": "%s"
                 }
                 """, error);
     }
