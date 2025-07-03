@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 function ForceCheckbox(props) {
 
   const handleChange = (event) => {

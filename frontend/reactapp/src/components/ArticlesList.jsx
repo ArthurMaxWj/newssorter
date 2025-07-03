@@ -1,13 +1,23 @@
-import { useState } from 'react'
+import Button from './Button'
 
-function ArticlesList(props) {
+function ArticlesList({ articles, setPage }) {
+  return (
+    <div>
+      <Button label="Home" action={() => setPage("home")} />
 
-  console.log(props)
+      <h2>All articles:</h2>
 
-  return <div>
-    All articles: <br/>
-    <pre>{props.articles.map( arti => arti.title + "\n")}</pre>
-  </div>
+      {articles.map((article, index) => (
+        <article key={index} className="article">
+          <h3>{article.title}</h3>
+          <div>
+            <span>{article.date}</span> <span>{article.city}</span>
+          </div>
+          <p>{article.content}</p>
+        </article>
+      ))}
+    </div>
+  )
 }
 
 export default ArticlesList

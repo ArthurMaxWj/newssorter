@@ -7,8 +7,7 @@ import Error from "../components/Error"
 
 function ShowAllStaticPage(props) {
   const isDataLoaded = props.store.staticArticles.length > 0
-
-  if (isDataLoaded) return <ArticlesList articles={props.store.staticArticles} />
+  if (isDataLoaded) return <ArticlesList articles={props.store.staticArticles} setPage={props.setPage} />
 
   const [loading, setLoading] = useState(!isDataLoaded)
   const [error, setError] = useState("")
@@ -22,7 +21,7 @@ function ShowAllStaticPage(props) {
           props.setStore({
             ...props.store,
             staticArticles: data.articles
-          });
+          })
         } else {
           setError(data.error)
           setLoading(false)
@@ -41,8 +40,8 @@ function ShowAllStaticPage(props) {
   } else {
     // ArticleList technically won't render anyway because it will be caught at top of component
     // I'm leaving it to not have missing case (if somthing unexpected happens)
-    if (error != "") return <Error text={error} />
-    else return <ArticlesList articles={props.store.staticArticles} />
+    if (error != "") return <Error text={error} setPage={props.setPage} />
+    else return <ArticlesList articles={props.store.staticArticles} setPage={props.setPage} />
   }
 }
 

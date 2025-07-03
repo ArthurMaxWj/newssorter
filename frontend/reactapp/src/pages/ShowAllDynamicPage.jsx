@@ -7,8 +7,8 @@ import Error from "../components/Error"
 
 function ShowAllDynamicPage(props) {
   const isDataLoaded = props.store.dynamicArticles.length > 0
+  if (isDataLoaded) return <ArticlesList articles={props.store.dynamicArticles} setPage={props.setPage} />
 
-  if (isDataLoaded) return <ArticlesList articles={props.store.dynamicArticles} />
 
   const [loading, setLoading] = useState(!isDataLoaded)
   const [error, setError] = useState("")
@@ -22,7 +22,7 @@ function ShowAllDynamicPage(props) {
           props.setStore({
             ...props.store,
             dynamicArticles: data.articles
-          });
+          })
         } else {
           setError(data.error)
           setLoading(false)
@@ -41,8 +41,8 @@ function ShowAllDynamicPage(props) {
   } else {
     // ArticleList technically won't render anyway because it will be caught at top of component
     // I'm leaving it to not have missing case (if somthing unexpected happens)
-    if (error != "") return <Error text={error} />
-    else return <ArticlesList articles={props.store.dynamicArticles} />
+    if (error != "") return <Error text={error} setPage={props.setPage} />
+    else return <ArticlesList articles={props.store.dynamicArticles} setPage={props.setPage} />
   }
 }
 
