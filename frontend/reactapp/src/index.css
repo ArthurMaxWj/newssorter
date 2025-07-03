@@ -104,7 +104,7 @@ label {
   border-radius: 8px;
 }
 
-.article h3 {
+.article .article-title {
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   color: #2c3e50;
@@ -139,3 +139,90 @@ label {
   font-size: 1rem;
   margin: 1rem 0;
 }
+
+mark {
+  background-color: #ffe066;
+  color: #666;               
+  padding: 0.1em 0.3em;
+  border-radius: 0.5em;
+  font-weight: 600;
+}
+
+
+/* Search box wrapper */
+#search-box {
+  margin: 1rem 0 2rem;
+  text-align: center;
+}
+
+/* Search input field */
+#search-box input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+#search-box input[type="text"]:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);
+}
+
+@media (max-width: 500px) {
+  #search-box input[type="text"] {
+    width: 90%;
+  }
+}
+
+/* Radio box container */
+#radio-box {
+  margin: 1.5rem 0 2rem;
+  text-align: center;
+}
+
+/* Layout of radio group */
+#radio-box div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+/* Label style */
+#radio-box label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+/* Hover effect only — background changes on label */
+#radio-box label:hover {
+  background-color: #f0f0f0;
+}
+
+/* Optional: highlight selected text */
+#radio-box input[type="radio"]:checked + span {
+  font-weight: 600;
+  color: #3498db;
+}
+
+/* Radio button default style + blue accent */
+#radio-box input[type="radio"] {
+  accent-color: #3498db;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+

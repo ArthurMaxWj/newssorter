@@ -36,14 +36,25 @@ public class ChatController {
 
     @GetMapping("/static-all")
     public String staticall(Model model) {
-        if (true) return wrapFailure("Processing Error: Internal files of articles or cities might have been corrupted.");
-        String json;
-        try {
-            json = readFileAsString("internal/articles.json");
-        } catch (Exception e) {
-            return wrapFailure("Processing Error: Internal files of articles or cities might have been corrupted.");
+        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile();
+        if (articlesMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't read or deserialize articles.json file");
         }
-        return wrapSuccess(json);
+        List<Article> articles = articlesMaybe.get();
+
+        for (int i = 0; i < articles.size(); i++) {
+            Article a = articles.get(i);
+            a.setCity("Unknown");
+            a.setKind(Article.ArticleKind.LOCAL);
+            articles.set(i, a);
+        }
+
+        Optional<String> resMaybe = articlesToJson(articles);
+        if (resMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't serialize articles into JSON");
+        }
+
+        return wrapSuccess(resMaybe.get());
     }
 
     @GetMapping("/dynamic-all")
@@ -71,6 +82,7 @@ public class ChatController {
         for (int i = 0; i < articles.size(); i++) {
             Article a = articles.get(i);
             a.setCity(cities.get(i));
+            a.setKind(Article.ArticleKind.LOCAL);
             articles.set(i, a);
         }
 
