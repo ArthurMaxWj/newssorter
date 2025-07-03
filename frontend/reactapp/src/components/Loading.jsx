@@ -1,9 +1,9 @@
 function Loading(props) {
 
-  return <div>
+  return <section id="loading-page">
     <h2>Loading results...</h2>
     <p>{props.text}</p>
-  </div>
+  </section>
 }
 
 export default Loading

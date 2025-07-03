@@ -2,11 +2,11 @@ import Button from './Button'
 
 function Error(props) {
 
-  return <div>
+  return <section id="error-page">
     <h2>Error has occured!</h2>
     <p>{props.text}</p>
     <Button label="Home" action={() => props.setPage("home")}/>
-  </div>
+  </section>
 }
 
 export default Error

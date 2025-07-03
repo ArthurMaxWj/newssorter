@@ -2,7 +2,7 @@ import Button from './Button'
 
 function ArticlesList({ articles, setPage }) {
   return (
-    <div>
+    <section id="article-list-page">
       <Button label="Home" action={() => setPage("home")} />
 
       <h2>All articles:</h2>
@@ -16,7 +16,7 @@ function ArticlesList({ articles, setPage }) {
           <p>{article.content}</p>
         </article>
       ))}
-    </div>
+    </section>
   )
 }
 
