@@ -26,17 +26,13 @@ import java.util.Optional;
 
 
 @RestController
+@RequestMapping("/api") 
 public class ChatController {
 
     private final Pattern REGEXP_PATTERN = Pattern.compile("[a-zA-Z\\s.']+(,[a-zA-Z\\s.']+)*");
 
     @Autowired
     private OpenRouterService openRouterService;
-
-    @GetMapping("/")
-    public String home() {
-        return "Use /static-all or /dynamic-all";
-    }
 
     @GetMapping("/static-all")
     public String staticall(Model model) {

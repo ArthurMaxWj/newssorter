@@ -30,3 +30,64 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+import org.apache.tools.ant.DirectoryScanner
+
+task buildAndCopyReact(type: Exec) {
+    group = "custom"
+    description = "Builds the React app and copies it into Spring Boot static folder"
+
+    def frontendDir = "$projectDir/frontend/reactapp"
+    def springStaticAppDir = "$projectDir/src/main/resources/static/app"
+    def springStaticAssetsDir = "$projectDir/src/main/resources/static/assets"
+
+    doFirst {
+        println "Cleaning old static files..."
+        delete fileTree(springStaticAppDir)
+        delete fileTree(springStaticAssetsDir)
+    }
+
+    // Run npm install and npm run build
+    commandLine "bash", "-c", """
+        set -e
+        cd ${frontendDir}
+        npm install
+        npm run build
+    """
+}
+
+task copyReactBuild(type: Copy) {
+    dependsOn buildAndCopyReact
+    group = "custom"
+    description = "Copies built React app into Spring Boot static folder"
+
+    def frontendDir = "$projectDir/frontend/reactapp"
+    def springStaticAppDir = "$projectDir/src/main/resources/static/app"
+    def springStaticAssetsDir = "$projectDir/src/main/resources/static/assets"
+
+    def buildDir = file("$frontendDir/build").exists() ? "$frontendDir/build" :
+                   file("$frontendDir/dist").exists() ? "$frontendDir/dist" : null
+
+    if (buildDir == null) {
+        throw new GradleException("No React build output found (expected 'build/' or 'dist/') in $frontendDir")
+    }
+
+    from(buildDir)
+    into(springStaticAppDir)
+
+    doLast {
+        println "Copying assets to static/assets..."
+        def assetsDir = file("$springStaticAppDir/assets")
+        if (assetsDir.exists()) {
+            copy {
+                from "$springStaticAppDir/assets"
+                into springStaticAssetsDir
+            }
+        } else {
+            println "No assets directory found to copy."
+        }
+        println "React build copied to static folder."
+    }
+}
+

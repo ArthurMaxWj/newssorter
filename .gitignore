@@ -1,4 +1,7 @@
 .env
+src/main/resources/static/app/
+src/main/resources/static/assets/
+
 
 HELP.md
 .gradle
