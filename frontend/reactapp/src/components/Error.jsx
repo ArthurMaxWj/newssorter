@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-function Loading(props) {
+function Error(props) {
 
   return <div>
-    <h2>Loading results...</h2>
+    <h2>Error has occured!</h2>
     <p>{props.text}</p>
   </div>
 }
 
-export default Loading
+export default Error

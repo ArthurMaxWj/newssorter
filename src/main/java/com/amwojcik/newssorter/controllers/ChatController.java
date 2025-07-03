@@ -40,9 +40,9 @@ public class ChatController {
         try {
             json = readFileAsString("internal/articles.json");
         } catch (Exception e) {
-            return "Processing Error: Internal files of articles or cities might have been corrupted.";
+            return wrapFailure("Processing Error: Internal files of articles or cities might have been corrupted.");
         }
-        return json;
+        return wrapSuccess(json);
     }
 
     @GetMapping("/dynamic-all")
@@ -52,7 +52,7 @@ public class ChatController {
         // TODO: use parameter later in project
         String result = processAi(true); 
         if (result.contains("Error:")) {
-            return result;
+            return wrapFailure(result);
         }
 
         List<String> cities = new ArrayList<>();
@@ -60,11 +60,12 @@ public class ChatController {
             cities.add(city.trim());
         }
 
-        List<Article> articles;
         Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile();
-        if (articlesMaybe.isPresent()) {
-            articles = articlesMaybe.get();
-        } else return "JSON Error: Can't read or deserialize articles.json file";
+        if (articlesMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't read or deserialize articles.json file");
+        }
+        List<Article> articles = articlesMaybe.get();
+
         
         for (int i = 0; i < articles.size(); i++) {
             Article a = articles.get(i);
@@ -72,10 +73,15 @@ public class ChatController {
             articles.set(i, a);
         }
 
-        return articlesToJson(articles).orElse("JSON Error: Can't serialize articles into JSON");
+        Optional<String> resMaybe = articlesToJson(articles);
+        if (resMaybe.isEmpty()) {
+            return wrapFailure("JSON Error: Can't serialize articles into JSON");
+        }
+
+        return wrapSuccess(resMaybe.get());
     }
 
-    public String processAi(boolean forceMemo) {
+    public String processAi(boolean forceMemo) { // don't wrap results at this stage
         String query;
         try {
             query = chatQuery();
@@ -110,11 +116,8 @@ public class ChatController {
         } else {
             return "Processing Error: AI returned something I can't parse.";
         }
-
-
     }
-
-    
+ 
 
 
     private String chatQuery() throws Exception {
@@ -182,4 +185,21 @@ public class ChatController {
         }
     }
 
+    private String wrapFailure(String error) {
+        return String.format("""
+                {
+                    "success": "false",
+                    "error": "$s"
+                }
+                """, error);
+    }
+
+    private String wrapSuccess(String articlesJson) {
+        return String.format("""
+                {
+                    "success": "true",
+                    "articles": %s
+                }
+                """, articlesJson);
+    }
 }

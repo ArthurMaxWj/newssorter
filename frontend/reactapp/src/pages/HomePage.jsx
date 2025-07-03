@@ -5,7 +5,6 @@ import ForceCheckbox from '../components/ForceCheckbox'
 
 function HomePage(props) {
 
-  console.log(props.store)
   let isAIDataDownloaded = props.store.dynamicArticles.length > 0
 
   return <div>
