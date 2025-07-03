@@ -15,7 +15,7 @@ function ShowAllDynamicPage(props) {
 
 
   useEffect(() => {
-    fetch('/api/dynamic-all')
+    fetch(`/api/dynamic-all?forcememo=${props.isForced}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success == "true") {

@@ -36,9 +36,9 @@ public class ChatController {
 
     @GetMapping("/static-all")
     public String staticall(Model model) {
-        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile();
+        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile("articles-local");
         if (articlesMaybe.isEmpty()) {
-            return wrapFailure("JSON Error: Can't read or deserialize articles.json file");
+            return wrapFailure("JSON Error: Can't read or deserialize articles-local.json file");
         }
         List<Article> articles = articlesMaybe.get();
 
@@ -59,7 +59,7 @@ public class ChatController {
 
     @GetMapping("/dynamic-all")
     public String dynamicall(@RequestParam(name = "forcememo", required = false) String forceMemorizedValue, Model model) {
-        boolean isMemoForced = "on".equals(forceMemorizedValue);
+        boolean isMemoForced = "true".equals(forceMemorizedValue); // in case it's null
 
         // TODO: use parameter later in project
         String result = processAi(true); 
@@ -72,9 +72,9 @@ public class ChatController {
             cities.add(city.trim());
         }
 
-        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile();
+        Optional<List<Article>> articlesMaybe = articlesFromInternalJsonFile("articles-local");
         if (articlesMaybe.isEmpty()) {
-            return wrapFailure("JSON Error: Can't read or deserialize articles.json file");
+            return wrapFailure("JSON Error: Can't read or deserialize articles-local.json file");
         }
         List<Article> articles = articlesMaybe.get();
 
@@ -135,7 +135,7 @@ public class ChatController {
 
     private String chatQuery() throws Exception {
         String cities = readFileAsString("internal/cities.csv");
-        String articles = readFileAsString("internal/articles.json");
+        String articles = readFileAsString("internal/articles-local.json");
 
         String query = """
                 I will send you a JSON file. Each record in the array is a new article.
@@ -186,11 +186,13 @@ public class ChatController {
         }
     }
 
-    private Optional<List<Article>> articlesFromInternalJsonFile() {
+    private Optional<List<Article>> articlesFromInternalJsonFile(String partialFileName) {
+        String fullFilename = String.format("internal/%s.json", partialFileName);
+
         String json;
         List<Article> articles;
         try {
-            json = readFileAsString("internal/articles.json");
+            json = readFileAsString(fullFilename);
             ObjectMapper mapper = new ObjectMapper();
             return Optional.of(mapper.readValue(json, new TypeReference<List<Article>>() {}));
         } catch (Exception e) {

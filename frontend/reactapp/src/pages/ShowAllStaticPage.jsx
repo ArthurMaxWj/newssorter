@@ -14,7 +14,7 @@ function ShowAllStaticPage(props) {
 
 
   useEffect(() => {
-    fetch('/api/static-all')
+    fetch(`/api/static-all?forcememo=${props.isForced}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success == "true") {

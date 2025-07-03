@@ -19,10 +19,10 @@ function PaginatedContent() {
     case home:
         return <HomePage store={store} setPage={setPage} isForced={isForced} setIsForced={setIsForced}  />
     case showAllStatic:
-      return <ShowAllStaticPage store={store} setStore={setStore} setPage={setPage}  />
+      return <ShowAllStaticPage store={store} setStore={setStore} setPage={setPage} isForced={isForced}  />
 
     case showAllDynamic:
-      return <ShowAllDynamicPage store={store} setStore={setStore} setPage={setPage}  />
+      return <ShowAllDynamicPage store={store} setStore={setStore} setPage={setPage} isForced={isForced} />
     default:
       return <Error text={"Page Error: Unknown page"} setPage={setPage} />
   }

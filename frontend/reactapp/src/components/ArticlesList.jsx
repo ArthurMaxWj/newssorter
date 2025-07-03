@@ -28,7 +28,7 @@ function ArticlesList({ articles, setPage }) {
       </div>
       <div id="radio-box">
     <div>
-      <h3>What kind of news?</h3>
+      <span>What kind of news?</span>
 
       <label>
         <input
