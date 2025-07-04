@@ -10,15 +10,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 @Service
 public class OpenRouterService {
 
     private static final String OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
     
-    private final Dotenv dotenv = Dotenv.load();
-    private String apiKey = dotenv.get("OPENROUTER_API_KEY");
+    @Value("${openrouter.apiKey}")
+    private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
 

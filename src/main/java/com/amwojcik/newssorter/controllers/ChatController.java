@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.Optional;
+import org.springframework.web.client.HttpClientErrorException;
 
 
 @RestController
@@ -74,7 +75,7 @@ public class ChatController {
     public String dynamicall(@RequestParam(name = "forcememo", required = false) String forceMemorizedValue, Model model) {
         boolean isMemoForced = "true".equals(forceMemorizedValue); // in case it's null
 
-        String result = processAi(isMemoForced); 
+        String result = processAi(isMemoForced);
         if (result.contains("Error:")) {
             return wrapFailure(result);
         }
@@ -141,7 +142,11 @@ public class ChatController {
                 """;
         
         if (!forceMemo) {
-            openRouterService.getCompletion(query);
+            try {
+                openRouterService.getCompletion(query);
+            } catch (HttpClientErrorException e) {
+                return "Processing Error: Probably wrong credentials for AI API";
+            }
         }
 
         if (searchResult.contains("Error:")) { // API error

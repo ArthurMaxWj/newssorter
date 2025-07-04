@@ -1,0 +1,81 @@
+!build/
+!build/libs/
+!build/libs/app.jar
+
+HELP.md
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+
+
+#############  FRONTEND:
+
+
+# Logs
+frontend/reactapp/logs
+frontend/reactapp/*.log
+frontend/reactapp/npm-debug.log*
+frontend/reactapp/yarn-debug.log*
+frontend/reactapp/yarn-error.log*
+frontend/reactapp/pnpm-debug.log*
+frontend/reactapp/lerna-debug.log*
+
+# Dependencies
+frontend/reactapp/node_modules
+frontend/reactapp/dist
+frontend/reactapp/dist-ssr
+frontend/reactapp/*.local
+
+# Editor directories and files
+frontend/reactapp/.vscode/*
+!frontend/reactapp/.vscode/extensions.json
+frontend/reactapp/.idea
+frontend/reactapp/.DS_Store
+frontend/reactapp/*.suo
+frontend/reactapp/*.ntvs*
+frontend/reactapp/*.njsproj
+frontend/reactapp/*.sln
+frontend/reactapp/*.sw?
+
+
+!build/
+!build/libs/
+!build/libs/app.jar
