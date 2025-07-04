@@ -1,68 +1,68 @@
 package com.amwojcik.newssorter.models.articles;
 
 public class Article {
-    private String title;
-    private String content;
-    private String date;
-    private ArticleKind kind;
-    private String city;
+	private String title;
+	private String content;
+	private String date;
+	private ArticleKind kind;
+	private String city;
 
-    public enum ArticleKind {
-        LOCAL,
-        GLOBAL;
-    }
-    
-    public Article() {}
+	public enum ArticleKind {
+		LOCAL, GLOBAL;
+	}
 
-    public Article(String title, String content, String date, ArticleKind kind, String city) {
-        this.title = title;
-        this.content = content;
-        this.date = date;
-        this.kind = kind;
-        this.city = city;
-    }
+	public Article() {
+	}
 
-    public Article(String title, String content, String date, ArticleKind kind) {
-        this(title, content, date, kind, "Unknown");
-    }
+	public Article(String title, String content, String date, ArticleKind kind, String city) {
+		this.title = title;
+		this.content = content;
+		this.date = date;
+		this.kind = kind;
+		this.city = city;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public Article(String title, String content, String date, ArticleKind kind) {
+		this(title, content, date, kind, "Unknown");
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public String getDate() {
-        return date;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+	public String getDate() {
+		return date;
+	}
 
-    public ArticleKind getKind() {
-        return kind;
-    }
+	public void setDate(String date) {
+		this.date = date;
+	}
 
-    public void setKind(ArticleKind kind) {
-        this.kind = kind;
-    }
+	public ArticleKind getKind() {
+		return kind;
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public void setKind(ArticleKind kind) {
+		this.kind = kind;
+	}
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
 }
