@@ -6,8 +6,7 @@ import Error from "../components/Error"
 
 
 function ShowAllDynamicPage(props) {
-  // const isDataLoaded = props.store.dynamicArticles.length > 0
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(props.store.dynamicArticles.length == 0)
   const [error, setError] = useState("")
 
   useEffect(() => {

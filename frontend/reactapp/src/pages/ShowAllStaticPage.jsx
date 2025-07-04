@@ -6,7 +6,7 @@ import Error from "../components/Error"
 
 
 function ShowAllStaticPage(props) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(props.store.staticArticles.length == 0)
   const [error, setError] = useState("")
 
   useEffect(() => {
