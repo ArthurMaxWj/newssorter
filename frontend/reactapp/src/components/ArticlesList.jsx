@@ -14,8 +14,12 @@ function ArticlesList({ articles, setPage }) {
     setSelection(e.target.value)
   }
 
-  const okKind = (articleKind, matchAgaint) => {
-    return articleKind == matchAgaint || matchAgaint == "BOTH";
+
+  const doesFitFilter = (article, matchAgaint) => {
+    const cityAccepted = (article.city.startsWith(search) || search.trim() == "") || article.kind == "GLOBAL"
+    const kindAccepted = article.kind == matchAgaint || matchAgaint == "BOTH"
+
+    return  cityAccepted && kindAccepted
   }
 
   return (
@@ -68,8 +72,7 @@ function ArticlesList({ articles, setPage }) {
       </div>
       <div class="article-list">
         {articles.map((article, index) => {
-          if ((article.city.startsWith(search) || search.trim() == "") && okKind(article.kind, selection))
-            return (
+          if (doesFitFilter(article, selection)) return (
             <article key={index} className="article">
               <h3 class="article-title">[{article.kind}] {article.title}</h3>
               <div>
@@ -77,7 +80,7 @@ function ArticlesList({ articles, setPage }) {
               </div>
               <p>{article.content}</p>
             </article>
-            )
+          )
         })}
       </div>
     </section>

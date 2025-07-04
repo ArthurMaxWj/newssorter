@@ -74,8 +74,7 @@ public class ChatController {
     public String dynamicall(@RequestParam(name = "forcememo", required = false) String forceMemorizedValue, Model model) {
         boolean isMemoForced = "true".equals(forceMemorizedValue); // in case it's null
 
-        // TODO: use parameter later in project
-        String result = processAi(true); 
+        String result = processAi(isMemoForced); 
         if (result.contains("Error:")) {
             return wrapFailure(result);
         }
