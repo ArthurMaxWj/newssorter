@@ -61,25 +61,52 @@ main > section {
   line-height: 1.6;
 }
 
-/* Buttons */
+/* Shared base button style */
 button {
-  padding: 0.6rem 1.2rem;
-  margin: 0.5rem 0;
-  background-color: #3498db;
-  color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  color: white;
+  background-color: #3498db;
   cursor: pointer;
-  position: relative;
+  font-size: 1rem;
   transition: background 0.1s ease-in-out, box-shadow 0.1s ease, transform 0.1s ease;
+  position: relative;
 }
 
+/* Rectangular button */
+.rect-button {
+  padding: 0.6rem 1.2rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+}
+
+/* Round icon-style button */
+.round-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem;
+  vertical-align: middle;
+}
+
+
+/* Hover effect for all buttons */
 button:hover {
   background-color: #5dade2;
-  box-shadow: 0 3px 6px rgba(50, 50, 50, 0.4); /* blue glow */
-  transform: translateY(-1px); /* pop forward */
+  box-shadow: 0 3px 6px rgba(50, 50, 50, 0.4);
+  transform: translateY(-1px);
 }
+
+/* Checkbox label */
+label {
+  display: inline-block;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
 
 
 /* Checkbox label */

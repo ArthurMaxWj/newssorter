@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Button from './Button'
+import HomeButton from './HomeButton'
 
 function ArticlesList({ articles, setPage }) {
   const [search, setSearch] = useState("")
@@ -24,7 +24,7 @@ function ArticlesList({ articles, setPage }) {
 
   return (
     <section id="article-list-page">
-      <Button label="Home" action={() => setPage("home")} />
+      <HomeButton setPage={setPage} />
 
       <h1>All articles:</h1>
       <div id="search-box" >
