@@ -1,13 +1,10 @@
-import { useState } from 'react'
 import Button from '../components/Button'
 import ForceCheckbox from '../components/ForceCheckbox'
 import RefreshButton from '../components/RefreshButton'
 
-
-
 function HomePage(props) {
 
-  let isAIDataDownloaded = props.store.dynamicArticles.length > 0
+  const isAIDataDownloaded = props.store.dynamicArticles.length > 0
 
   return <section id="home-page">
     <Button label="See static (no AI)" action={() => props.setPage("showAllStatic")} />

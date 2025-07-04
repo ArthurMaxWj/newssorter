@@ -1,5 +1,4 @@
 function ForceCheckbox(props) {
-  console.log(props.isForced)
 
   const handleChange = (event) => {
     props.setIsForced(event.target.checked);
@@ -13,7 +12,7 @@ function ForceCheckbox(props) {
           onChange={handleChange}
           disabled={props.isDynamicLoaded}
         />
-        Emulate AI (force using memorized answear)
+        Emulate AI (force using memorized answer)
       </label>
   );
 }
