@@ -13,6 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Service responsible for communication with the AI chat via OpenRouter.
+ *
+ * Allows selection of different AI models, though not all are free.
+ */
 @Service
 public class OpenRouterService {
 

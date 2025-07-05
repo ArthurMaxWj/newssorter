@@ -2,6 +2,9 @@ package com.amwojcik.newssorter.models.chat;
 
 import java.util.List;
 
+/**
+ * Message sent to the AI chat from the OpenRouterService.
+ */
 public class ChatRequest {
 	private String model;
 	private List<ChatMessage> messages;

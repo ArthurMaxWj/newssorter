@@ -21,6 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
+/**
+ * Handles API requests to /api and responds with JSON.
+ *
+ * The "success" field determines whether articles are returned. - If "success"
+ * is true, the "articles" field will contain the articles. - If "success" is
+ * false, the "error" field will contain an error message.
+ *
+ * The error message should always include the string "Error:".
+ */
 @RestController
 @RequestMapping("/api")
 public class ChatController {
@@ -185,8 +194,8 @@ public class ChatController {
 	}
 
 	/**
-	 * If the result is contained in the answer, but there is also other unnecessary
-	 * information is present, filter only the data we need.
+	 * Filters out unnecessary information from the response, extracting only the
+	 * relevant data if the result is embedded in a larger answer.
 	 */
 	private String obtainSignificantPart(String res) {
 		Pattern pattern = REGEXP_PATTERN;
@@ -195,6 +204,9 @@ public class ChatController {
 		return matcher.group(0);
 	}
 
+	/**
+	 * Public for testability — allows mocking in unit tests.
+	 */
 	public String readFileAsString(String classpathFile) throws Exception {
 		ClassPathResource resource = new ClassPathResource(classpathFile);
 		try (InputStream inputStream = resource.getInputStream()) {

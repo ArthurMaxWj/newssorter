@@ -1,5 +1,8 @@
 package com.amwojcik.newssorter.models.chat;
 
+/**
+ * Individual AI chat message.
+ */
 public class ChatMessage {
 	private String role;
 	private String content;

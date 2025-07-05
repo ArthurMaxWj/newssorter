@@ -1,5 +1,10 @@
 package com.amwojcik.newssorter.models.articles;
 
+/**
+ * Article model used by ChatController.
+ *
+ * The "kind" field determines whether the article is local or global news.
+ */
 public class Article {
 	private String title;
 	private String content;

@@ -2,6 +2,9 @@ package com.amwojcik.newssorter.models.chat;
 
 import java.util.List;
 
+/**
+ * Response from the AI to the OpenRouterService containing an answer.
+ */
 public class ChatResponse {
 	private List<Choice> choices;
 

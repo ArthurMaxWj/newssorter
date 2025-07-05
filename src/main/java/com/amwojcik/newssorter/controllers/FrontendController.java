@@ -3,6 +3,9 @@ package com.amwojcik.newssorter.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Controls the frontend UI and forwards requests to the React application.
+ */
 @Controller
 public class FrontendController {
 
