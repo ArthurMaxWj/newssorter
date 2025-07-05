@@ -12,10 +12,10 @@ The application processes a list of news articles from a JSON source, uses AI to
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Java 17 or 21, Spring Framework  
-- **Frontend**: React (located in `frontend/reactapp`)  
-- **AI**: OpenRouter API (DeepSeek by default)  
-- **Build Tools**: Gradle, Shell Scripts  
+- **Backend**: Java 17 or 21, Spring Framework
+- **Frontend**: React (located in `frontend/reactapp`)
+- **AI**: OpenRouter API (DeepSeek by default)
+- **Build Tools**: Gradle, Shell Scripts
 
 ---
 
