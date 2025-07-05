@@ -195,7 +195,7 @@ public class ChatController {
 		return matcher.group(0);
 	}
 
-	private String readFileAsString(String classpathFile) throws Exception {
+	public String readFileAsString(String classpathFile) throws Exception {
 		ClassPathResource resource = new ClassPathResource(classpathFile);
 		try (InputStream inputStream = resource.getInputStream()) {
 			return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
