@@ -86,7 +86,7 @@ Run the following commands inside the `frontend/reactapp` directory:
 
 ---
 
-## 🤖 Notes on ChatGPT Usage
+## 🤖 Notes on ChatGPT usage
 
 While I'm new to using ChatGPT, I’ve found it helpful during development. I don’t let it directly modify the codebase, but I use it thoughtfully — especially for style suggestions and boilerplate help.
 
