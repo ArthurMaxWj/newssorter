@@ -1,7 +1,12 @@
 package com.amwojcik.newssorter.controllers;
 
+import com.amwojcik.newssorter.models.articles.Article;
 import com.amwojcik.newssorter.services.OpenRouterService;
+import com.amwojcik.newssorter.services.ArticleHandlingService;
+import com.amwojcik.newssorter.services.CitiesFromAiService;
 
+import java.util.List;
+import java.util.ArrayList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.anyString;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @WebMvcTest(ChatController.class)
 class ChatControllerTest {
@@ -36,6 +44,12 @@ class ChatControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@SpyBean
+	private CitiesFromAiService citiesFromAiService;
+
+	@MockBean
+	private ArticleHandlingService articleHandlingService;
+
 	@Test
 	void staticAll_shouldReturnSuccessJson_whenNoError() throws Exception {
 		mockMvc.perform(get("/api/static-all")).andExpect(status().isOk())
@@ -47,12 +61,24 @@ class ChatControllerTest {
 		doThrow(new IOException("Simulated file read failure")).when(chatController).readFileAsString(anyString());
 
 		mockMvc.perform(get("/api/static-all")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.success").value("false"))
-				.andExpect(jsonPath("$.error").value("JSON Error: Can't read or deserialize articles-local.json file"));
+				.andExpect(jsonPath("$.success").value("false")).andExpect(jsonPath("$.error").value(
+						"JSON Error: Can't read or deserialize articles-local.json or articles-global.json file"));
 	}
 
 	@Test
 	void dynamicAll_shouldReturnSuccessJson_whenNoError() throws Exception {
+		when(openRouterService.getCompletion(anyString())).thenReturn("Seattle,New York,Boston");
+
+		when(articleHandlingService.normalizeArticlesFromCities(anyList(), anyList(), any()))
+    	.thenReturn(new ArrayList<>(List.of(
+			makeArticle("Seattle"),
+			makeArticle("New York"),
+			makeArticle("Boston")
+		)));
+
+		when(articleHandlingService.normalizeArticles(anyList(), anyString(), any()))
+		.thenReturn(new ArrayList<>(List.of()));
+
 		mockMvc.perform(get("/api/dynamic-all").param("forcememo", "false")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.success").value("true")).andExpect(jsonPath("$.articles").exists());
 	}
@@ -62,8 +88,8 @@ class ChatControllerTest {
 		doThrow(new IOException("Simulated file read failure")).when(chatController).readFileAsString(anyString());
 
 		mockMvc.perform(get("/api/dynamic-all")).andExpect(status().isOk())
-				.andExpect(jsonPath("$.success").value("false")).andExpect(jsonPath("$.error")
-						.value("Processing Error: Internal files of articles or cities might have been corrupted."));
+				.andExpect(jsonPath("$.success").value("false"))
+				.andExpect(jsonPath("$.error").value("File Error: Can't read cities.csv or articles-local.json"));
 	}
 
 	@Test
@@ -75,5 +101,9 @@ class ChatControllerTest {
 		mockMvc.perform(get("/api/dynamic-all").param("forcememo", "false")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.success").value("false"))
 				.andExpect(jsonPath("$.error").value(containsString(errorMsg)));
+	}
+
+	private Article makeArticle(String city) {
+		return new Article("my title", "my content", "2025", Article.ArticleKind.LOCAL, city);
 	}
 }

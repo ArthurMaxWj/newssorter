@@ -13,7 +13,7 @@ function ShowAllDynamicPage(props) {
     fetch(`/api/dynamic-all?forcememo=${props.isForced}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success == "true") {
+        if (data.success) {
           props.setStore({
             ...props.store,
             dynamicArticles: data.articles

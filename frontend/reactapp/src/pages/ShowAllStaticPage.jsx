@@ -13,7 +13,7 @@ function ShowAllStaticPage(props) {
     fetch(`/api/static-all?forcememo=${props.isForced}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success == "true") {
+        if (data.success) {
           props.setStore({
             ...props.store,
             staticArticles: data.articles
