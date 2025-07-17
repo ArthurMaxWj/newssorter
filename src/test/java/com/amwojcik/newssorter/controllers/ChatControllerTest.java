@@ -77,7 +77,7 @@ class ChatControllerTest {
 		)));
 
 		when(articleHandlingService.normalizeArticles(anyList(), anyString(), any()))
-		.thenReturn(new ArrayList<>(List.of()));
+		.thenReturn(new ArrayList<>());
 
 		mockMvc.perform(get("/api/dynamic-all").param("forcememo", "false")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.success").value("true")).andExpect(jsonPath("$.articles").exists());
